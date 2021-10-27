@@ -1,15 +1,25 @@
 import React, { ReactElement, useState } from "react";
 import { Joke } from "../../entities/joke";
 import { CategorySelectorComponent } from "./components/category-selector";
+import { FavoritesComponent } from './components/favorites';
 import { JokeComponent } from "./components/joke";
 import { getJoke } from "./services/backend-service";
 
-interface Properties {
-  onAddToFavorites: (joke: Joke) => void;
-}
 
-export function JokeViewComponent(props: Properties): ReactElement {
+export function JokeViewComponent(): ReactElement {
   const [joke, setJoke] = useState<Joke>();
+  const [jokes, setJokes] = useState<Joke[]>([]);
+
+  function addJoke(j: Joke): void {
+    if (!jokes.includes(j)) {
+      setJokes([...jokes, j]);
+    }
+  }
+
+  function removeJoke(id: number): void {
+    jokes.splice(id, 1);
+    setJokes([...jokes]);
+  }
 
   function onSelect(categorie: string): void {
     getJoke(categorie).then(setJoke);
@@ -27,10 +37,16 @@ export function JokeViewComponent(props: Properties): ReactElement {
             created_at={joke.created_at}
             value={joke.value}
           ></JokeComponent>
-          <button onClick={props.onAddToFavorites.bind(null, joke)}>
+          <button onClick={addJoke.bind(null, joke)}>
             Add to Favorites
           </button>
         </React.Fragment>
+      )}
+      {jokes.length > 0 && (
+        <div>
+          <h1>Favorites</h1>
+          <FavoritesComponent jokes={jokes} onRemoveItem={removeJoke}></FavoritesComponent>
+        </div>
       )}
     </React.Fragment>
   );

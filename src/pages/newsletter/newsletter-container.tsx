@@ -14,10 +14,6 @@ export function NewsletterContainerComponent(): ReactElement {
     firstname: "",
   });
 
-  function updateForm(newState: NewsletterForm): void {
-    setFormState(newState);
-  }
-
   return (
     <form>
       <InputFormFieldComponent

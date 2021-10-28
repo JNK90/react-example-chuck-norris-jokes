@@ -6,7 +6,7 @@ import { JokeComponent } from "./components/joke";
 import { getJoke } from "./services/backend-service";
 
 
-export function JokeViewComponent(): ReactElement {
+export function JokeViewComponent(props: {subscriber: string}): ReactElement {
   const [joke, setJoke] = useState<Joke>();
   const [jokes, setJokes] = useState<Joke[]>([]);
 
@@ -48,6 +48,7 @@ export function JokeViewComponent(): ReactElement {
           <FavoritesComponent jokes={jokes} onRemoveItem={removeJoke}></FavoritesComponent>
         </div>
       )}
+      {props.subscriber && <button>{props.subscriber} HAS SUBSCRIBED</button>}
     </React.Fragment>
   );
 }

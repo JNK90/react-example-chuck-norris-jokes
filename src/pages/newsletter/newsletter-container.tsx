@@ -1,15 +1,19 @@
-import { ReactElement, useState } from "react";
+import { FormEvent, ReactElement, useState } from "react";
 import { InputFormFieldComponent } from "./components/input-form-field";
 import { useValidation } from './hooks/useValidation';
 import { containsOnlyLetters, isEmail } from './services/validation';
 
-interface NewsletterForm {
+export interface NewsletterForm {
   firstname: string;
   lastname: string;
   email: string;
 }
 
-export function NewsletterContainerComponent(): ReactElement {
+interface Properties {
+  submitFn: (formData: NewsletterForm) => void; 
+}
+
+export function NewsletterContainerComponent(props: Properties): ReactElement {
   const [formState, setFormState] = useState<NewsletterForm>({
     email: '',
     lastname: '',
@@ -20,8 +24,16 @@ export function NewsletterContainerComponent(): ReactElement {
   const isLastnameValid = useValidation(formState.lastname, [containsOnlyLetters]);
   const isEmailValid = useValidation(formState.email, [isEmail]);
 
+  function submitForm(e: FormEvent | MouseEvent) {
+    e.preventDefault();
+    console.log(formState);
+    if (isFirstnameValid && isLastnameValid && isEmailValid) {
+      props.submitFn(formState);
+    }
+  }
+
   return (
-    <form>
+    <form onSubmit={submitForm}>
       <InputFormFieldComponent
         label="firstname"
         value={formState.firstname}
@@ -55,7 +67,7 @@ export function NewsletterContainerComponent(): ReactElement {
         }
         isValid={isEmailValid}
       ></InputFormFieldComponent>
-      <button>Subscribe</button>
+      <button onClick={submitForm}>Subscribe</button>
     </form>
   );
 }

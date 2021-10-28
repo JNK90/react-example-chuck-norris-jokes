@@ -3,6 +3,7 @@ import { ChangeEvent, ReactElement } from "react";
 interface Properties {
   label: string;
   value: string;
+  isValid: boolean;
   onChange: (newValue: string) => void;
 }
 
@@ -16,6 +17,7 @@ export function InputFormFieldComponent(props: Properties): ReactElement {
           props.onChange(e.target.value)
         }
       ></input>
+      {!props.isValid && <div>Field is invalid</div>}
     </div>
   );
 }

@@ -19,7 +19,6 @@ export function CategorySelectorComponent(props: ClickFunction): ReactElement {
 
   return (
     <React.Fragment>
-      {categories.length > 0 && (
         <select value={selection} id="categorySelector" onChange={onSelectionChanged}>
           <option value="">all</option>
           {categories.map((categorie, index) => (
@@ -28,7 +27,6 @@ export function CategorySelectorComponent(props: ClickFunction): ReactElement {
             </option>
           ))}
         </select>
-      )}
       <button onClick={props.onCategorySelected.bind(null, selection)}>Get random fact!</button>
     </React.Fragment>
   );
